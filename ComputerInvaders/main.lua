@@ -25,6 +25,8 @@ function love.load()
 	enemy_num = 36;
 	move_instance = 0;
 	
+	fire = { _x = player_x + 60, _y = _H - 75, is_fired = true, image = love.graphics.newImage("images/si_fire.png") };
+	
 	-- Enemy Array
 	enemy = {}; enemy[0] = {}; enemy[1] = {}; enemy[2] = {}; enemy[3] = {}; enemy[4] = {}; enemy[5] = {};
 
@@ -79,13 +81,6 @@ function love.load()
 	si_bottom_open 		= love.graphics.newImage("images/si_enemy_0001.png");
 	si_bottom_closed 	= love.graphics.newImage("images/si_enemy_0000.png");
 	
-	-- Console Array Test Output
-	--for i=0,5 do
-	--	for j=0,5 do
-	--		print(enemy[i][j].is_hit);
-	--		print(enemy[i][j].player_type);
-	--	end
-	--end
 end
 
 function love.update(dt)
@@ -115,6 +110,10 @@ function love.update(dt)
 	elseif love.keyboard.isDown("right") then
 		player_x = player_x + 3;
     end 
+	
+	if love.keyboard.isDown(" ") then
+		print("Spacebar is down");
+	end
 end
 
 function love.draw()
@@ -128,6 +127,10 @@ function love.draw()
 		
 	-- Render Player
 	love.graphics.draw(si_player, player_x, player_y);
+	
+	if fire.is_fired then
+		love.graphics.draw(fire.image, fire._x, fire._y);
+	end
 	
 	-- Render Enemies
 	for j=0,5 do
@@ -156,6 +159,10 @@ function love.draw()
 		_x = 0;
 		_y = _y + y_offset;
 	end
-	
-	
+end
+
+function check_collision(ax1,ay1,aw,ah, bx1,by1,bw,bh)
+
+  local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
+  return ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1
 end
